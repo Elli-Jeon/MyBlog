@@ -1,4 +1,6 @@
 ---
+tags:
+  - react
 published: true
 date: 2021-07-04T17:09:22.708Z
 title: '[FreeTalk] Starting Blog'
