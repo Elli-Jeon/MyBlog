@@ -3,14 +3,14 @@
 module.exports = {
   url: "https://nemodiary.netlify.app/",
   title: "사각기억",
-  tagline: "Autodidact developer and sometimes hoop-jumper",
+  tagline: "배움은 언제나 새롭게",
   copyright: "© 2019 willjw3, All rights reserved",
   author: {
-    name: "WILL JAY",
+    name: "Elli Jeon",
     bio: "Self-taught web developer and whisky aficionado",
     contacts: {
       linkedin: "https://www.linkedin.com/in/will-ward-65234a170/",
-      github: "https://github.com/willjw3",
+      github: "https://github.com/Elli-Jeon",
       stackoverflow:
         "https://stackoverflow.com/users/10262432/will-ward?tab=profile",
       freecodecamp: "https://www.freecodecamp.org/willjw3",
