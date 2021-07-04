@@ -9,12 +9,12 @@ module.exports = {
     name: "Elli Jeon",
     bio: "Self-taught web developer and whisky aficionado",
     contacts: {
-      // linkedin: "https://www.linkedin.com/in/will-ward-65234a170/",
+      linkedin: "https://www.linkedin.com/in/will-ward-65234a170/",
       github: "https://github.com/Elli-Jeon",
-      // stackoverflow:
-      //   "https://stackoverflow.com/users/10262432/will-ward?tab=profile",
-      // freecodecamp: "https://www.freecodecamp.org/willjw3",
-      // twitter: "https://twitter.com/willjw3",
+      stackoverflow:
+        "https://stackoverflow.com/users/10262432/will-ward?tab=profile",
+      freecodecamp: "https://www.freecodecamp.org/willjw3",
+      twitter: "https://twitter.com/willjw3",
     },
   },
   labels: [
