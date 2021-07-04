@@ -2,7 +2,7 @@
 
 module.exports = {
   url: "https://nemodiary.netlify.app/",
-  title: "Developer Diary",
+  title: "사각기억",
   tagline: "Autodidact developer and sometimes hoop-jumper",
   copyright: "© 2019 willjw3, All rights reserved",
   author: {
