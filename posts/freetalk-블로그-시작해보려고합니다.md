@@ -1,7 +1,7 @@
 ---
 published: true
 date: 2021-07-04T17:09:22.708Z
-title: '[FreeTalk] 블로그 시작해보려고합니다.'
+title: '[FreeTalk] Starting Blog'
 ---
 이번에 짧게 영화 서치 페이지를 만들면서 느낀게 많았습니다... 
 
