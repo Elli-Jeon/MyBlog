@@ -1,7 +1,7 @@
 "use strict"
 
 module.exports = {
-  url: "https://nemodiary.netlify.app/",
+  url: "https://nemodiary.netlify.app",
   title: "사각기억",
   tagline: "배움은 언제나 새롭게",
   copyright: "© 2019 willjw3, All rights reserved",
