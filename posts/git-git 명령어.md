@@ -1,5 +1,5 @@
 ---
-title: '[Git]Git 명령어(command) 정리해보자(1)'
+title: '[Git] Git 명령어(command) 정리해보자 (1)'
 tags: ["git"]
 published: true
 date: '2021-07-06'
