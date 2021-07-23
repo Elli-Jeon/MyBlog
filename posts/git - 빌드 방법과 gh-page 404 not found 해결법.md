@@ -1,9 +1,9 @@
 ---
 tags:
-  - ["git"]
+  - git
 published: true
-date: 2021-07-04T17:09:22.708Z
-title: '[FreeTalk] Starting Blog'
+date: 2021-07-23
+title: '[Git] 깃허브 페이지 이용하여 빌드하는 법 (+404에러 해결)'
 ---
 
 ## 깃허브 페이지를 사용하여 빌드, 배포하는 법 (+404 에러 해결)
