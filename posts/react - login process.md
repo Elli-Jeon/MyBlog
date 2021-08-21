@@ -28,7 +28,9 @@ date: "2021-08-21"
 - 절대 로컬 스토리지, 세션 스토리지에는 jwt token이 저장되면 안됨. XSS 공격에 매우 취약
 - jwt token을 하나만 사용할 경우 이를 탈취하여 사용 가능
 
-따라서 access token, refresh token 두 가지의 토큰을 생성해내고 refresh token을 secure, httpOnly 쿠키로, access token을 웹 앱 내 로컬변수로 저장하여 사용
+따라서 access token, refresh token 두 가지의 토큰을 생성해내고 refresh token을 secure, httpOnly 쿠키로, access token을 json body로 보내서웹 앱 내 로컬변수로 저장하여 사용
+
+클라이언트는 set cookie에 http only 태그가 달려있어서 접근이 불가능. 요 쿠키는 특정 api와 통신시에 자동으로 달림(?) 그렇기에 요 토큰이 만료되기 전까지는 계속 통신하면서 access token을 header bearer에 담아 보내면 됨
 
 <a href="https://velog.io/@yaytomato/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%90%EC%84%9C-%EC%95%88%EC%A0%84%ED%95%98%EA%B2%8C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0" target="_blank">전체 프로세스 참조 사이트 1</a>
 
