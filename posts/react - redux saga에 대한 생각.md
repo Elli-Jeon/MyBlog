@@ -101,3 +101,43 @@ websocket event는 push / saga는 pull 이라고 이해
 
 
 <a href="https://ssangq.netlify.app/posts/redux-saga" target="_blank">Redux-Saga의 간단한 사용법</a>
+
+## 3. redux saga를 이용할 때 folder structure
+
+reduxjs toolkit 의 도입 이후로, 더 이상 store 안에 module을 따로 빼놓고 pages 폴더 안에서 화면 별로 구성하기 보다는, features 안에 각 화면 별로 폴더를 만들고, 그 안에 index, slice, saga를 몰아 넣는다고 한다.  
+
+
+![image](https://user-images.githubusercontent.com/68575268/130815585-6ce405c9-c6d2-44b8-9fa2-e847e444e73d.png)
+
+<a href="https://im-developer.tistory.com/195" target="_blank">Redux-Saga 폴더 구조</a>
+
+
+## 4. saga 파일 내 구조
+```javascript
+import { put, takeEvery, all } from 'redux-saga/effects'
+
+const delay = (ms) => new Promise(res => setTimeout(res, ms))
+
+function* helloSaga() {
+  console.log('Hello Sagas!')
+}
+
+function* incrementAsync() {
+  yield delay(1000)
+  yield put({ type: 'INCREMENT' })
+}
+
+function* watchIncrementAsync() {
+  yield takeEvery('INCREMENT_ASYNC', incrementAsync)
+}
+
+// notice how we now only export the rootSaga
+// single entry point to start all Sagas at once
+export default function* rootSaga() {
+  yield all([
+    helloSaga(),
+    watchIncrementAsync()
+  ])
+}
+
+```
