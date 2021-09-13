@@ -77,3 +77,39 @@ date: "2021-08-21"
 4. 정말 보안이 중요하다면 그렇게 해도 되겠죠??
 
 결론은 엑세스 토큰을 로컬 스토리지에 넣어두고 사용한다고 한다. 어차피 리프레쉬 토큰은 http only라서 접근이 안되니 1시간 마다 만료되는 엑세스토큰을 사용해서 현재 로그인한 유저를 체크한다고 한다. 아마 토큰이 있다면 로그인한 유저를 체크하는 hook을 운용하지 않을까..?? 싶다.
+
+## 4. + 21/09/13 추가
+
+---
+
+공부를 더 하다가 이제는 완전히 개념을 잡은 것 같아서 추가한다.
+
+1. access token과 refresh token으로 나누어서 token을 관리한다. access token은 10분 내외, refresh token은 2주 정도로 만료기간을 잡아 둔다.
+2. client에서 로그인을 시도하면 서버는 아이디와 비밀번호를 확인해서 response를 보낸다. 이 response에는 access token이 response.data에, refresh token이 HttpOnly, setCredential된 쿠키로 넘어온다.
+3. client 쪽에서는 이 access token과 refresh token을 보관해야한다. refresh token은 쿠키이므로 자동으로 저장되고 앞으로 서버와의 request, response에 자동으로 붙어진다.(경우에 따라 local storage에 저장도 되는데 이는 아래 링크 참조) 문제는 access token인데 이 access token을 앞으로 request Header의 Authorization에 넣어야 한다.
+4. 찾아보기로는 다음과 같이 하면 된다고 한다.
+
+```javascript
+// saga에서 access token 받고
+axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`
+```
+
+5. 문제는 나는 아무리 해도 이게 안 된다는 것..! 그래서 access token을 local storage에 저장하는 것도 고려해보았으나 아무래도 보안의 우려가 있었다. 따라서 결정한 방법이 *Auth class*화 였다. auth api를 모아둔 것을 Auth 클래스로 만들어서 거기에 access token을 보관하였다. (추후 클래스 내 private 한 프로퍼티로 만들 생각)
+6. 이렇게 하면 문제가 다 해결된다. acces token은 private하게 js variable로 관리가 가능하고, refresh token은 http only인 쿠키이다.
+7. axios instance에서 interceptor로 header에 access token을 달아두므로 인증이 필요한 작업을 할 수 있게 된다.
+8. 추가로 로그인 유지는 App 에다가 (최상단 컴포넌트) 다음과 같은 작업을 해준다. refresh 요청을 보낼 때마다 백엔드에서는 새로운 access token을 지급해준다.
+
+```javascript
+// app.js
+useEffect(()=>{
+   const timer = 시간;
+   setTimeout(silentRefresh(), timer - 6000);
+}, []);
+// 페이지가 refresh 될때마다 silent refresh 실행, 타이머도 두어서 시간마다 체크
+
+silentRefresh는 access token을 단 채로 api요청. response에다가 access token을 새로 매달아서, 이를 변경해주어야 함.
+```
+
+9. 로그아웃은 refresh token을 쿠키에서 지워주고, 백엔드에서도 db에 저장해둔 refresh token을 지워준다.
+
+[JWT는 어디서 보관해야할까?](https://velog.io/@0307kwon/JWT%EB%8A%94-%EC%96%B4%EB%94%94%EC%97%90-%EC%A0%80%EC%9E%A5%ED%95%B4%EC%95%BC%ED%95%A0%EA%B9%8C-localStorage-vs-cookie)
