@@ -95,6 +95,9 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`
 ```
 
 5. 문제는 나는 아무리 해도 이게 안 된다는 것..! 그래서 access token을 local storage에 저장하는 것도 고려해보았으나 아무래도 보안의 우려가 있었다. 따라서 결정한 방법이 *Auth class*화 였다. auth api를 모아둔 것을 Auth 클래스로 만들어서 거기에 access token을 보관하였다. (추후 클래스 내 private 한 프로퍼티로 만들 생각)
+
+> 09.14 추가 : auth를 class 화해서 내부에 access token을 넣으려 했는데 page refresh를 하면 초기화하는거는 매한가지였다... 그래서 local storage에 넣어두고 페이지가 refresh될 때마다 access token을 새로 발급하기로 하였다.
+
 6. 이렇게 하면 문제가 다 해결된다. acces token은 private하게 js variable로 관리가 가능하고, refresh token은 http only인 쿠키이다.
 7. axios instance에서 interceptor로 header에 access token을 달아두므로 인증이 필요한 작업을 할 수 있게 된다.
 8. 추가로 로그인 유지는 App 에다가 (최상단 컴포넌트) 다음과 같은 작업을 해준다. refresh 요청을 보낼 때마다 백엔드에서는 새로운 access token을 지급해준다.
