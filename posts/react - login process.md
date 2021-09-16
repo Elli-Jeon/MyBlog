@@ -82,11 +82,14 @@ date: "2021-08-21"
 
 ---
 
-공부를 더 하다가 이제는 완전히 개념을 잡은 것 같아서 추가한다.
+공부를 더 하다가 이제는 어느정도 개념을 잡은 것 같아서 추가한다.
 
 1. access token과 refresh token으로 나누어서 token을 관리한다. access token은 10분 내외, refresh token은 2주 정도로 만료기간을 잡아 둔다.
-2. client에서 로그인을 시도하면 서버는 아이디와 비밀번호를 확인해서 response를 보낸다. 이 response에는 access token이 response.data에, refresh token이 HttpOnly, setCredential된 쿠키로 넘어온다.
-3. client 쪽에서는 이 access token과 refresh token을 보관해야한다. refresh token은 쿠키이므로 자동으로 저장되고 앞으로 서버와의 request, response에 자동으로 붙어진다.(경우에 따라 local storage에 저장도 되는데 이는 아래 링크 참조) 문제는 access token인데 이 access token을 앞으로 request Header의 Authorization에 넣어야 한다.
+
+2. client에서 로그인을 시도하면 서버는 아이디와 비밀번호를 확인해서 response를 보낸다. 이 response에는 access token이 response.data(JSON payload)에, refresh token이 HttpOnly, secure 태그를 단 쿠키로 넘어온다.
+
+3. client 쪽에서는 이 access token과 refresh token을 보관해야한다. refresh token은 쿠키이므로 자동으로 앞으로의 HTTP 통신에 따라 붙는다. (경우에 따라 local storage에 저장도 되는데 이는 아래 링크 참조) 문제는 access token인데 이 access token을 앞으로 request Header의 Authorization에 넣어야 한다.
+
 4. 찾아보기로는 다음과 같이 하면 된다고 한다.
 
 ```javascript
@@ -96,11 +99,21 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`
 
 5. 문제는 나는 아무리 해도 이게 안 된다는 것..! 그래서 access token을 local storage에 저장하는 것도 고려해보았으나 아무래도 보안의 우려가 있었다. 따라서 결정한 방법이 *Auth class*화 였다. auth api를 모아둔 것을 Auth 클래스로 만들어서 거기에 access token을 보관하였다. (추후 클래스 내 private 한 프로퍼티로 만들 생각)
 
-> 09.14 추가 : auth를 class 화해서 내부에 access token을 넣으려 했는데 page refresh를 하면 초기화하는거는 매한가지였다... 그래서 local storage에 넣어두고 페이지가 refresh될 때마다 access token을 새로 발급하기로 하였다.
+> 09.14 추가 : 위 5번의 방식이 되지만 문제는 auth를 class 화해서 내부에 access token을 넣으려 했는데 page refresh를 하면 초기화하는거는 매한가지였다... 그래서 local storage에 넣어두고 페이지가 refresh될 때마다 access token을 새로 발급하기로 하였다. 
 
 6. 이렇게 하면 문제가 다 해결된다. acces token은 private하게 js variable로 관리가 가능하고, refresh token은 http only인 쿠키이다.
+
 7. axios instance에서 interceptor로 header에 access token을 달아두므로 인증이 필요한 작업을 할 수 있게 된다.
+
 8. 추가로 로그인 유지는 App 에다가 (최상단 컴포넌트) 다음과 같은 작업을 해준다. refresh 요청을 보낼 때마다 백엔드에서는 새로운 access token을 지급해준다.
+
+> 09.16 추가 : 로그인 유지에 대해서 중대한 변경(?) 사항이 생겼다. 기존에는 redux-persist를 이용해서 isLoggedIn을 true false로 나누어서 관리를 하였다. 목적은 UI 상으로 보여지는 것 관리. 여기서 또 문제가 발생하는데, 이렇게 되면 화면에 보여지는 로그인 여부와 실제 로그인 여부 사이에 괴리감이 생긴다는 것이다. 따라서 라매개발자님의 작업과 facebook을 뒤져 봤는데 결론은 다음과 같다. 
+
+9. App component에 다음의 작업을 추가해준다. silent refresh 뿐만 아니라 유저의 로그인 여부를 확인하는 그리고 누가 로그인 했는지에 대한 정보를 refresh token을 통해서 비교하고 받아오는 작업을 app을 켜자마자 작동시키고 (useEffect를 통해서) 작업이 진행되는 동안 스피너 / 회색 화면 등을 띄어서 로그인이 안 된 상태 => 로그인이 된 상태로 화면이 깜빡이는 것을 막는다. (이는 react-router의 페이지 이동은 새로고침이 일어나지 않는 작업이기 때문이다.)
+
+10. silent refresh와 현재 로그인 유저 체크는 refresh 토큰만을 이용한다. 나중에 글쓰기 등의 작업은 access token을 확인한다. 만약 없다? 그럼 로그인 한 것처럼 보여도 재인증절차를 거쳐야 한다.
+
+11. remember me? 의 경우 refresh token의 만료 시간을 설정함으로서 해결할 수 있는데, 백엔드에서 전송하는 쿠키에 expire time을 설정하지 않는다면 브라우저 창을 닫으면 브라우저의 쿠키에서 자동 삭제된다고 한다.
 
 ```javascript
 // app.js
