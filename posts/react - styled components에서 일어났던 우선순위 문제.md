@@ -87,6 +87,17 @@ export const MatchingContainer = styled.section`
 
 블로그의 내용은 "다른 component의 style을 수정한 새로운 component를 사용하고 싶다면 기존의 component에서 props.className를 전달받도록 작성하자!" 라는 것이었다. 
 
+**충격적인 사실//**
+
+![image](https://user-images.githubusercontent.com/68575268/135112119-4b0e0177-993b-454c-87f7-f2a8a716bb53.png)
+
+![image](https://user-images.githubusercontent.com/68575268/135113264-ab34ac21-42a9-4999-8dc6-653be4ca1dda.png)
+
+![image](https://user-images.githubusercontent.com/68575268/135113289-638ec213-cd1a-4c4a-94f2-7305f8caa6fe.png)
+
+import를 해오는 다른 모듈의 styles는 내가 원하는 대로 안 되는 것 같다... base template에는 최소한의 것만 남기고 각 파트별로 따로 스타일링 해야 할 것 같다
+
+[참고](https://github.com/styled-components/styled-components/issues/382)
 
 ```javascript```
 
