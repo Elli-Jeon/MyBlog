@@ -60,3 +60,34 @@ useEffect(()=>{
 <Component ref = {lazyTarget}/>
 
 ```
+---
+
+## 3. 21.09.28 내용 추가
+
+```javascript
+  const lazyTarget = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            console.log(entry);
+          }
+        });
+      },
+      { threshold: 0.3 },
+    );
+
+    if (lazyTarget.current) {
+      observer.observe(lazyTarget.current);
+    }
+
+    return () => observer && observer.disconnect();
+  }, [lazyTarget]);
+
+  //다음과 같이 작성하는 것이 더 깔끔하다
+
+  //react-intersction-observer 라는 library가 있으니 활용해서 깔끔하게 코드 작성하자!
+
+```
